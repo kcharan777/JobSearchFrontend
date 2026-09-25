@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Search Agent</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+      color: #1e293b;
+    }
+
+    header {
+      background: #1d4ed8;
+      color: white;
+      text-align: center;
+      padding: 30px 15px;
+    }
+
+    header h1 {
+      margin: 0 0 10px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+
+    .form-box, .job-card {
+      background: white;
+      padding: 25px;
+      border-radius: 14px;
+      box-shadow: 0 4px 15px #00000010;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin: 15px 0 7px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      background: #2563eb;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background: #94a3b8;
+      cursor: wait;
+    }
+
+    .job-card h3 {
+      color: #1d4ed8;
+      margin-bottom: 8px;
+    }
+
+    .match {
+      display: inline-block;
+      background: #dcfce7;
+      color: #166534;
+      padding: 7px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .job-card a {
+      display: inline-block;
+      margin-top: 12px;
+      color: #2563eb;
+      font-weight: bold;
+    }
+
+    #status {
+      text-align: center;
+      margin: 20px 0;
+      white-space: pre-wrap;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #64748b;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Job Search Agent</h1>
+  <p>Find jobs that match your skills with Gemini AI</p>
+</header>
+
+<div class="container">
+
+  <div class="form-box">
+    <h2>Find Your Next Job</h2>
+
+    <form id="jobForm">
+
+      <label for="role">Job Role</label>
+      <input id="role" placeholder="e.g. Python Developer Intern" required>
+
+      <label for="location">Preferred Location</label>
+      <input id="location" placeholder="e.g. Hyderabad" required>
+
+      <label for="skills">Your Skills</label>
+      <input id="skills" placeholder="e.g. Python, SQL, Git" required>
+
+      <button id="searchBtn" type="submit">Find Jobs</button>
+
+    </form>
+  </div>
+
+  <div id="status"></div>
+  <div id="results"></div>
+
+</div>
+
+<footer>
+  Powered by Gemini AI · Job Search Agent
+</footer>
+
+<script>
+  const API_URL =
+    "https://job-search-agent-wgxb.onrender.com/agent/invoke";
+
+  const form = document.getElementById("jobForm");
+  const button = document.getElementById("searchBtn");
+  const statusBox = document.getElementById("status");
+  const results = document.getElementById("results");
+
+  form.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const role = document.getElementById("role").value.trim();
+    const location = document.getElementById("location").value.trim();
+    const skills = document.getElementById("skills").value.trim();
+
+    button.disabled = true;
+    button.textContent = "Searching...";
+    statusBox.textContent = "Gemini is finding matching jobs...";
+    results.innerHTML = "";
+
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          input: `Find ${role} jobs in ${location} for freshers.
+My skills are ${skills}. Search the job database and
+compare my skills with the job requirements.`
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.detail || "Request failed");
+      }
+
+      displayResults(data.output);
+
+      statusBox.textContent = "Search completed!";
+
+    } catch (error) {
+      statusBox.textContent =
+        "Unable to connect to the agent. Please try again.\n" +
+        error.message;
+    }
+
+    button.disabled = false;
+    button.textContent = "Find Jobs";
+  });
+
+  function displayResults(output) {
+    const card = document.createElement("div");
+    card.className = "job-card";
+
+    const heading = document.createElement("h3");
+    heading.textContent = "Gemini Job Recommendations";
+
+    const content = document.createElement("p");
+    content.style.whiteSpace = "pre-wrap";
+    content.textContent = output;
+
+    card.appendChild(heading);
+    card.appendChild(content);
+    results.appendChild(card);
+  }
+</script>
+
+</body>
+</html>
