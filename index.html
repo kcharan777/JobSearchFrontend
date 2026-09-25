@@ -19,28 +19,33 @@
     }
 
     header {
-      background: #1d4ed8;
+      background: linear-gradient(135deg, #1d4ed8, #6366f1);
       color: white;
       text-align: center;
-      padding: 30px 15px;
+      padding: 35px 15px;
     }
 
     header h1 {
       margin: 0 0 10px;
+      font-size: 30px;
+    }
+
+    header p {
+      margin: 0;
     }
 
     .container {
-      max-width: 700px;
+      max-width: 850px;
       margin: 30px auto;
-      padding: 20px;
+      padding: 15px;
     }
 
-    .form-box, .job-card {
+    .form-box {
       background: white;
       padding: 25px;
       border-radius: 14px;
       box-shadow: 0 4px 15px #00000010;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
 
     label {
@@ -57,43 +62,30 @@
       font-size: 16px;
     }
 
+    input:focus {
+      outline: 2px solid #93c5fd;
+      border-color: #2563eb;
+    }
+
     button {
-      width: 100%;
-      margin-top: 20px;
-      padding: 14px;
+      padding: 13px 20px;
       border: none;
       border-radius: 8px;
       background: #2563eb;
       color: white;
-      font-size: 17px;
+      font-size: 16px;
       font-weight: bold;
       cursor: pointer;
+    }
+
+    #searchBtn {
+      width: 100%;
+      margin-top: 22px;
     }
 
     button:disabled {
       background: #94a3b8;
       cursor: wait;
-    }
-
-    .job-card h3 {
-      color: #1d4ed8;
-      margin-bottom: 8px;
-    }
-
-    .match {
-      display: inline-block;
-      background: #dcfce7;
-      color: #166534;
-      padding: 7px 12px;
-      border-radius: 20px;
-      font-weight: bold;
-    }
-
-    .job-card a {
-      display: inline-block;
-      margin-top: 12px;
-      color: #2563eb;
-      font-weight: bold;
     }
 
     #status {
@@ -102,10 +94,122 @@
       white-space: pre-wrap;
     }
 
+    .results-heading {
+      margin: 25px 0 15px;
+    }
+
+    .job-card {
+      background: white;
+      padding: 24px;
+      border-radius: 14px;
+      box-shadow: 0 4px 15px #00000010;
+      margin-bottom: 20px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .job-card h3 {
+      color: #1d4ed8;
+      margin: 0 0 10px;
+      font-size: 21px;
+    }
+
+    .company {
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .badge {
+      background: #eff6ff;
+      color: #1d4ed8;
+      padding: 7px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+    }
+
+    .match {
+      display: inline-block;
+      background: #dcfce7;
+      color: #166534;
+      padding: 8px 13px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 14px;
+      margin: 8px 0;
+    }
+
+    .section-title {
+      font-weight: bold;
+      margin: 18px 0 7px;
+    }
+
+    .description {
+      line-height: 1.6;
+      color: #475569;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .skill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .skill {
+      background: #f1f5f9;
+      padding: 7px 11px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .missing {
+      color: #b45309;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .apply-btn {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      background: #2563eb;
+      color: white;
+      padding: 13px 22px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .apply-btn:hover {
+      background: #1d4ed8;
+    }
+
+    .note {
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 15px;
+    }
+
     footer {
       text-align: center;
-      padding: 20px;
+      padding: 25px;
       color: #64748b;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 25px;
+      }
+
+      .form-box, .job-card {
+        padding: 18px;
+      }
     }
   </style>
 </head>
@@ -114,7 +218,7 @@
 
 <header>
   <h1>Job Search Agent</h1>
-  <p>Find jobs that match your skills with Gemini AI</p>
+  <p>Find live jobs that match your skills with Gemini AI</p>
 </header>
 
 <div class="container">
@@ -125,15 +229,23 @@
     <form id="jobForm">
 
       <label for="role">Job Role</label>
-      <input id="role" placeholder="e.g. Python Developer Intern" required>
+      <input id="role"
+             placeholder="e.g. Python Developer Intern"
+             required>
 
       <label for="location">Preferred Location</label>
-      <input id="location" placeholder="e.g. Hyderabad" required>
+      <input id="location"
+             placeholder="e.g. Hyderabad"
+             required>
 
       <label for="skills">Your Skills</label>
-      <input id="skills" placeholder="e.g. Python, SQL, Git" required>
+      <input id="skills"
+             placeholder="e.g. Python, SQL, Git"
+             required>
 
-      <button id="searchBtn" type="submit">Find Jobs</button>
+      <button id="searchBtn" type="submit">
+        Find Jobs
+      </button>
 
     </form>
   </div>
@@ -144,10 +256,11 @@
 </div>
 
 <footer>
-  Powered by Gemini AI · Job Search Agent
+  Powered by Gemini AI · Live Job Search Agent
 </footer>
 
 <script>
+
   const API_URL =
     "https://job-search-agent-wgxb.onrender.com/agent/invoke";
 
@@ -157,23 +270,35 @@
   const results = document.getElementById("results");
 
   form.addEventListener("submit", async function(event) {
+
     event.preventDefault();
 
-    const role = document.getElementById("role").value.trim();
-    const location = document.getElementById("location").value.trim();
-    const skills = document.getElementById("skills").value.trim();
+    const role =
+      document.getElementById("role").value.trim();
+
+    const location =
+      document.getElementById("location").value.trim();
+
+    const skills =
+      document.getElementById("skills").value.trim();
 
     button.disabled = true;
     button.textContent = "Searching...";
-    statusBox.textContent = "Gemini is finding matching jobs...";
+
+    statusBox.textContent =
+      "Searching live vacancies. Please wait...";
+
     results.innerHTML = "";
 
     try {
+
       const response = await fetch(API_URL, {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json"
         },
+
         body: JSON.stringify({
           input: `Find ${role} jobs in ${location} for freshers.
 My skills are ${skills}. Search the job database and
@@ -184,38 +309,335 @@ compare my skills with the job requirements.`
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.detail || "Request failed");
+        throw new Error(
+          data.detail || "Request failed"
+        );
       }
+
+      if (data.total_jobs === 0) {
+
+        statusBox.textContent =
+          "No matching live jobs found. Try another role or location.";
+
+        return;
+      }
+
+      statusBox.textContent =
+        `Search completed! ${data.total_jobs} matching jobs found.`;
 
       displayResults(data.output);
 
-      statusBox.textContent = "Search completed!";
-
     } catch (error) {
+
       statusBox.textContent =
-        "Unable to connect to the agent. Please try again.\n" +
+        "Unable to connect to the agent.\n" +
         error.message;
+
+    } finally {
+
+      button.disabled = false;
+      button.textContent = "Find Jobs";
+
     }
 
-    button.disabled = false;
-    button.textContent = "Find Jobs";
   });
 
+
+  // Display the backend's job results as cards
+
   function displayResults(output) {
-    const card = document.createElement("div");
-    card.className = "job-card";
 
-    const heading = document.createElement("h3");
-    heading.textContent = "Gemini Job Recommendations";
+    const lines = output.split("\n");
 
-    const content = document.createElement("p");
-    content.style.whiteSpace = "pre-wrap";
-    content.textContent = output;
+    let jobs = [];
+    let currentJob = null;
+
+    lines.forEach(function(line) {
+
+      const text = line.trim();
+
+      // A new numbered job starts here
+
+      const jobStart = text.match(/^\d+\.\s+(.+)/);
+
+      if (jobStart) {
+
+        if (currentJob) {
+          jobs.push(currentJob);
+        }
+
+        currentJob = {
+          title: jobStart[1],
+          company: "",
+          location: "",
+          jobType: "",
+          experience: "",
+          date: "",
+          match: "",
+          matchedSkills: "",
+          missingSkills: "",
+          description: "",
+          requiredSkills: "",
+          responsibilities: "",
+          applyLink: ""
+        };
+
+        return;
+      }
+
+      if (!currentJob) return;
+
+      if (text.startsWith("Company:")) {
+        currentJob.company =
+          text.replace("Company:", "").trim();
+      }
+
+      else if (text.startsWith("Location:")) {
+        currentJob.location =
+          text.replace("Location:", "").trim();
+      }
+
+      else if (text.startsWith("Job Type:")) {
+        currentJob.jobType =
+          text.replace("Job Type:", "").trim();
+      }
+
+      else if (
+        text.startsWith("Experience:") ||
+        text.startsWith("Work Experience:")
+      ) {
+        currentJob.experience =
+          text.substring(text.indexOf(":") + 1).trim();
+      }
+
+      else if (text.startsWith("Posted Date:")) {
+        currentJob.date =
+          text.replace("Posted Date:", "").trim();
+      }
+
+      else if (text.startsWith("Skills Match:")) {
+        currentJob.match =
+          text.replace("Skills Match:", "").trim();
+      }
+
+      else if (text.startsWith("Matching Skills:")) {
+        currentJob.matchedSkills =
+          text.replace("Matching Skills:", "").trim();
+      }
+
+      else if (text.startsWith("Skills Not Found in Listing:")) {
+        currentJob.missingSkills =
+          text.replace(
+            "Skills Not Found in Listing:", ""
+          ).trim();
+      }
+
+      else if (text.startsWith("Description:")) {
+        currentJob.description =
+          text.replace("Description:", "").trim();
+      }
+
+      else if (text.startsWith("Required Skills:")) {
+        currentJob.requiredSkills =
+          text.replace("Required Skills:", "").trim();
+      }
+
+      else if (text.startsWith("Responsibilities:")) {
+        currentJob.responsibilities =
+          text.replace("Responsibilities:", "").trim();
+      }
+
+      else if (text.startsWith("Apply Here:")) {
+        currentJob.applyLink =
+          text.replace("Apply Here:", "").trim();
+      }
+
+      else if (
+        currentJob.description &&
+        !currentJob.requiredSkills &&
+        !currentJob.responsibilities &&
+        !currentJob.applyLink &&
+        !text.startsWith("===") &&
+        !text.startsWith("---")
+      ) {
+        currentJob.description += " " + text;
+      }
+
+      else if (
+        currentJob.requiredSkills &&
+        !currentJob.responsibilities &&
+        !currentJob.applyLink &&
+        !text.startsWith("---")
+      ) {
+        currentJob.requiredSkills += " " + text;
+      }
+
+      else if (
+        currentJob.responsibilities &&
+        !currentJob.applyLink &&
+        !text.startsWith("---")
+      ) {
+        currentJob.responsibilities += " " + text;
+      }
+
+    });
+
+    if (currentJob) {
+      jobs.push(currentJob);
+    }
+
+    const heading = document.createElement("h2");
+    heading.className = "results-heading";
+    heading.textContent = "Live Job Recommendations";
+
+    results.appendChild(heading);
+
+    jobs.forEach(function(job) {
+
+      const card = document.createElement("div");
+      card.className = "job-card";
+
+      const title = document.createElement("h3");
+      title.textContent = job.title;
+      card.appendChild(title);
+
+      const company = document.createElement("div");
+      company.className = "company";
+      company.textContent =
+        job.company || "Company not specified";
+
+      card.appendChild(company);
+
+      const details = document.createElement("div");
+      details.className = "details";
+
+      [
+        job.location,
+        job.jobType,
+        job.experience,
+        job.date
+      ].filter(Boolean).forEach(function(value) {
+
+        const badge = document.createElement("span");
+        badge.className = "badge";
+        badge.textContent = value;
+
+        details.appendChild(badge);
+
+      });
+
+      card.appendChild(details);
+
+      if (job.match) {
+
+        const match = document.createElement("div");
+        match.className = "match";
+        match.textContent =
+          "Skills Match: " + job.match;
+
+        card.appendChild(match);
+
+      }
+
+      if (job.matchedSkills) {
+
+        addSection(
+          card,
+          "Matching Skills",
+          job.matchedSkills
+        );
+
+      }
+
+      if (job.missingSkills) {
+
+        const missing = document.createElement("p");
+        missing.className = "missing";
+        missing.textContent =
+          "Skills not found in listing: " +
+          job.missingSkills;
+
+        card.appendChild(missing);
+
+      }
+
+      if (job.description) {
+        addSection(
+          card,
+          "Job Description",
+          job.description
+        );
+      }
+
+      if (job.requiredSkills) {
+        addSection(
+          card,
+          "Required Skills",
+          job.requiredSkills
+        );
+      }
+
+      if (job.responsibilities) {
+        addSection(
+          card,
+          "Responsibilities",
+          job.responsibilities
+        );
+      }
+
+      if (job.applyLink) {
+
+        const apply = document.createElement("a");
+        apply.className = "apply-btn";
+        apply.textContent = "Apply Now";
+
+        // Extract the actual URL from the backend text
+
+        const urlMatch = job.applyLink.match(
+          /https?:\/\/[^\s)]+/
+        );
+
+        if (urlMatch) {
+
+          apply.href = urlMatch[0];
+          apply.target = "_blank";
+          apply.rel = "noopener noreferrer";
+
+          card.appendChild(apply);
+
+        }
+
+      }
+
+      results.appendChild(card);
+
+    });
+
+    const note = document.createElement("p");
+    note.className = "note";
+    note.textContent =
+      "Skill match is based on keywords in your profile and the available job listing. Always check the employer's official requirements before applying.";
+
+    results.appendChild(note);
+
+  }
+
+
+  function addSection(card, headingText, contentText) {
+
+    const heading = document.createElement("div");
+    heading.className = "section-title";
+    heading.textContent = headingText;
+
+    const content = document.createElement("div");
+    content.className = "description";
+    content.textContent = contentText;
 
     card.appendChild(heading);
     card.appendChild(content);
-    results.appendChild(card);
+
   }
+
 </script>
 
 </body>
